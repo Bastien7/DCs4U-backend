@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class CurrencyService(val repository: CurrencyRepository) {
 
-    fun get(id: String) = repository.findById(id)
+    fun get(id: String): Currency? = repository.findById(id).orElseGet(null)
 
     fun createCurrency(request: CurrencyCreationRequest): String {
         val currency = Currency(name = request.name, symbol = request.symbol, owner = request.owner)
