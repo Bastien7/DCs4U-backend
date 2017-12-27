@@ -15,8 +15,8 @@ http://localhost:8080/api/currency
 Request body:
 ```
 {
-	"name": "JoeCoin",
-	"symbol": "J$",
+  "name": "JoeCoin",
+  "symbol": "J$",
   "owner": {
     "firstName": "Joe",
     "lastName": "White",
