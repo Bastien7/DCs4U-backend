@@ -15,13 +15,13 @@ http://localhost:8080/api/currency
 Request body:
 ```
 {
-  name: String, 
-  symbol: String,
-  owner: {
-    firstName: String,
-    lastName: String,
-    email: String,
-    birthday: Date
+	"name": "JoeCoin",
+	"symbol": "J$",
+  "owner": {
+    "firstName": "Joe",
+    "lastName": "White",
+    "email": "joe.white@gmail.com",
+    "birthday": "1970-01-01"
   }
 }
 ```
