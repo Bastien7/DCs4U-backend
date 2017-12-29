@@ -5,7 +5,7 @@ import java.time.LocalDate
 /**
  * Created by bastien on 26/11/2017.
  */
-class Owner(
+data class Owner(
     val firstName: String,
     val lastName: String,
     val email: String,
