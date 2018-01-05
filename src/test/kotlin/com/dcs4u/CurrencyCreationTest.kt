@@ -1,5 +1,6 @@
 package com.dcs4u
 
+import com.dcs4u.controller.ControllerUrl.CURRENCY_API
 import com.dcs4u.json.request.CurrencyCreationRequest
 import com.dcs4u.model.Currency
 import com.dcs4u.model.Owner
@@ -17,14 +18,14 @@ import java.time.LocalDate
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class CurrencyCreationTest {
 
-    val currencyApi = "http://localhost:8080/api/currency"
+    val currencyApi = "http://localhost:8080$CURRENCY_API"
     val restTemplate: RestTemplate = RestTemplate()
 
     @Autowired
     lateinit var currencyRepository: CurrencyRepository
 
     /**
-     * Create a currency, get it by it to check that the content is like expected,
+     * Create a testCurrency, get it by it to check that the content is like expected,
      * and delete it from the repository so that the repository is clean after the test
      */
     @Test
