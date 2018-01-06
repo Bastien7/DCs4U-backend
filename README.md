@@ -9,7 +9,6 @@ Here are the simple entry points of the currency API
 http://localhost:8080/api/currency?id=currencyId
 
 ### POST
-
 http://localhost:8080/api/currency
 
 Request body:
@@ -25,3 +24,24 @@ Request body:
   }
 }
 ```
+
+## Transaction API
+Here are the simple entry points of the transaction API.
+Once you have created a currency, you can do some transaction with it.
+
+### GET
+http://localhost:8080/api/transaction?id=transactionId
+
+### POST
+http://localhost:8080/api/transaction
+
+Request body:
+```
+{
+  "currencyId": "5a4ff031c5898844546b36bb",
+  "quantity": 12,
+  "additionalInformation": "Christmas gift for Joe"
+}
+```
+
+The field *additionalInformation* is **not** mandatory.
