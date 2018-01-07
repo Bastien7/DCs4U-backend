@@ -6,7 +6,7 @@ import com.dcs4u.service.TransactionService
 import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
-
+@CrossOrigin
 @RestController
 @RequestMapping(TRANSACTION_API)
 class TransactionController(val transactionService: TransactionService) {

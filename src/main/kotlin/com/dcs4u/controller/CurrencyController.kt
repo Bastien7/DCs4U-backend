@@ -6,7 +6,7 @@ import com.dcs4u.service.CurrencyService
 import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
-
+@CrossOrigin
 @RestController
 @RequestMapping(CURRENCY_API)
 class CurrencyController(val currencyService: CurrencyService) {
