@@ -3,7 +3,7 @@ package com.dcs4u.service
 import com.dcs4u.json.request.CurrencyCreationRequest
 import com.dcs4u.model.Currency
 import com.dcs4u.repository.CurrencyRepository
-import com.dcs4u.utils.ErrorMessages.CURRENCY_SHOULD_NOT_BE_NULL
+import com.dcs4u.utils.ErrorMessages.PERSISTENCE_FAILED
 import org.springframework.stereotype.Component
 
 /**
@@ -20,8 +20,8 @@ class CurrencyService(val repository: CurrencyRepository) {
 
         //Create and save the currency into the database
         val currency = Currency(name, symbol, owner)
-        val savedCurrency = repository.save(currency)
+        val savedCurrency = repository.save(currency) ?: throw Exception(PERSISTENCE_FAILED)
 
-        return savedCurrency ?: throw Exception(CURRENCY_SHOULD_NOT_BE_NULL)
+        return savedCurrency
     }
 }
