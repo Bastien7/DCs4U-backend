@@ -10,6 +10,7 @@ import com.dcs4u.repository.TransactionRepository
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +21,7 @@ import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Ignore
 class TransactionInstantiationTest {
 
     val transactionApi = "http://localhost:8080$TRANSACTION_API"

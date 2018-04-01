@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 
 
 @Repository
-interface TransactionRepository : MongoRepository<Transaction, String>
+interface TransactionRepository : MongoRepository<Transaction, String> {
+    fun findByCurrency_id(id: String): List<Transaction>
+}
