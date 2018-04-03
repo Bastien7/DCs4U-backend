@@ -6,6 +6,7 @@ import com.dcs4u.model.Currency
 import com.dcs4u.model.Owner
 import com.dcs4u.repository.CurrencyRepository
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,23 +33,24 @@ class CurrencyCreationTest {
     fun createCurrency() {
         val owner = Owner("Joe", "White", "joe.white@gmail.com", LocalDate.now())
         val request = CurrencyCreationRequest("JoeCoin", owner)
+        val requestOwner = Owner("Joe", "White", "joe.white@gmail.com", LocalDate.now())
+        val creationResponse: Currency? = restTemplate.postForObject(currencyApi, request, Currency::class.java)
+        val creationId: String = creationResponse?.id ?: return fail("No response or response id")
 
-        val instanceId: String? = restTemplate.postForObject(currencyApi, request, String::class.java)
-
-        instanceId?.let {
+        creationId.let {
             try {
-                val currency: Currency? = restTemplate.getForObject("$currencyApi?id=$instanceId", Currency::class.java)
+                val currency: Currency? = restTemplate.getForObject("$currencyApi?id=$creationId", Currency::class.java)
+                val (name, symbol, owner) = currency ?: throw Exception("No currency returned")
 
-                assertEquals(instanceId, currency?.id)
-                assertEquals(request.name, currency?.name)
-
-                val expectedOwner = request.owner
-                assertEquals(expectedOwner.firstName, currency?.owner?.firstName)
-                assertEquals(expectedOwner.lastName, currency?.owner?.lastName)
-                assertEquals(expectedOwner.email, currency?.owner?.email)
-                assertEquals(expectedOwner.birthday, currency?.owner?.birthday)
+                assertEquals(creationId, currency.id)
+                assertEquals(request.name, name)
+                val (firstName, lastName, email, birthday) = owner
+                assertEquals(requestOwner.firstName, firstName)
+                assertEquals(requestOwner.lastName, lastName)
+                assertEquals(requestOwner.email, email)
+                assertEquals(requestOwner.birthday, birthday)
             } finally {
-                currencyRepository.deleteById(instanceId)
+                currencyRepository.deleteById(creationId)
             }
         }
     }

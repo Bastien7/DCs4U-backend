@@ -54,7 +54,7 @@ class TransactionInstantiationTest {
                 val (currency, quantity, additionalInformation) = transaction ?: throw Exception("No transaction returned")
 
                 assertEquals(instanceId, transaction.id)
-                assertEquals(currency, testCurrency)
+                assertEquals(testCurrency, currency)
                 assertEquals(request.quantity, quantity)
                 assertEquals(request.additionalInformation, additionalInformation)
             } finally {
