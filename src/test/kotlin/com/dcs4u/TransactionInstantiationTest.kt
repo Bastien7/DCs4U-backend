@@ -35,7 +35,7 @@ class TransactionInstantiationTest {
     @Before
     fun createCurrency() {
         val owner = Owner("Joe", "White", "joe.white@gmail.com", LocalDate.now())
-        val currency = Currency("JoeCoin", owner)
+        val currency = Currency("JoeCoin","sferiCoin", owner)
         testCurrency = currencyRepository.save(currency)
     }
 
