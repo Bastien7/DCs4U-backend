@@ -31,7 +31,7 @@ class CurrencyCreationTest {
     @Test
     fun createCurrency() {
         val owner = Owner("Joe", "White", "joe.white@gmail.com", LocalDate.now())
-        val request = CurrencyCreationRequest("JoeCoin", "J$", owner)
+        val request = CurrencyCreationRequest("JoeCoin", owner)
 
         val instanceId: String? = restTemplate.postForObject(currencyApi, request, String::class.java)
 
@@ -41,7 +41,6 @@ class CurrencyCreationTest {
 
                 assertEquals(instanceId, currency?.id)
                 assertEquals(request.name, currency?.name)
-                assertEquals(request.symbol, currency?.symbol)
 
                 val expectedOwner = request.owner
                 assertEquals(expectedOwner.firstName, currency?.owner?.firstName)

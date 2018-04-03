@@ -7,6 +7,5 @@ import com.dcs4u.model.Owner
  */
 data class CurrencyCreationRequest(
     val name: String,
-    val symbol: String,
     val owner: Owner
 )
