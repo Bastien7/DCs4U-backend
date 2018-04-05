@@ -5,8 +5,7 @@ import com.authenteq.builders.BigchainDbConfigBuilder
 import com.authenteq.builders.BigchainDbTransactionBuilder
 import com.authenteq.constants.Operations
 import com.authenteq.model.Asset
-import com.authenteq.model.Transaction
-import com.dcs4u.json.request.TransactionRequest
+import com.dcs4u.json.request.Transaction
 import net.i2p.crypto.eddsa.EdDSAPrivateKey
 import net.i2p.crypto.eddsa.EdDSAPublicKey
 import net.i2p.crypto.eddsa.KeyPairGenerator
@@ -31,25 +30,25 @@ class BigChainDbService(@Value("\${application.id}") val id: String, @Value("\${
         return edDsaKpg.generateKeyPair()
     }
 
-    fun createTransaction(request: TransactionRequest): String {
+    fun createTransaction(request: Transaction): String {
         val keyPair = getKeyPair()
 
         return BigchainDbTransactionBuilder.init()
-            .addAssets(request, TransactionRequest::class.java)
+            .addAssets(request, Transaction::class.java)
             .operation(Operations.CREATE)
             .buildAndSign(keyPair.public as EdDSAPublicKey, keyPair.private as EdDSAPrivateKey)
             .sendTransaction().id
     }
 
-    fun getTransaction(id: String): TransactionRequest {
-        val transaction: Transaction? = TransactionsApi.getTransactionById(id)
+    fun getTransaction(id: String): Transaction {
+        val transaction: com.authenteq.model.Transaction? = TransactionsApi.getTransactionById(id)
         val json = transaction?.asset?.data as? Map<*, *> ?: error("Error while parsing the transaction response")
 
-        val currencyId: String = json[TransactionRequest::currencyId.name]?.toString() ?: error("CurrencyId parsing error")
-        val quantity: Double = json[TransactionRequest::quantity.name] as? Double ?: error("Quantity parsing error")
-        val additionalInformation: String? = json[TransactionRequest::additionalInformation.name]?.toString()
+        val currencyId: String = json[Transaction::currencyId.name]?.toString() ?: error("CurrencyId parsing error")
+        val quantity: Double = json[Transaction::quantity.name] as? Double ?: error("Quantity parsing error")
+        val additionalInformation: String? = json[Transaction::additionalInformation.name]?.toString()
 
-        return TransactionRequest(currencyId, quantity.toFloat(), additionalInformation)
+        return Transaction(currencyId, quantity.toFloat(), additionalInformation)
     }
 
     fun getTransactionsByCurrency(currencyId: String): List<Asset> = TransactionsApi.searchTransactionByKeyword(currencyId)
