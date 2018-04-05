@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
  * Created by bastien on 03/01/2018.
  */
 @Component
+@Deprecated("This service was for local database storage purpose only. Use BigChainDbService instead.")
 class TransactionService(val transactionRepository: TransactionRepository, val currencyService: CurrencyService) {
 
     fun get(id: String): Transaction? = transactionRepository.findById(id).orElse(null)
