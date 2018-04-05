@@ -4,9 +4,9 @@ import com.authenteq.api.TransactionsApi
 import com.authenteq.builders.BigchainDbConfigBuilder
 import com.authenteq.builders.BigchainDbTransactionBuilder
 import com.authenteq.constants.Operations
+import com.authenteq.model.Asset
 import com.authenteq.model.Transaction
 import com.dcs4u.json.request.TransactionRequest
-import com.google.gson.internal.LinkedTreeMap
 import net.i2p.crypto.eddsa.EdDSAPrivateKey
 import net.i2p.crypto.eddsa.EdDSAPublicKey
 import net.i2p.crypto.eddsa.KeyPairGenerator
@@ -43,7 +43,7 @@ class BigChainDbService(@Value("\${application.id}") val id: String, @Value("\${
 
     fun getTransaction(id: String): TransactionRequest {
         val transaction: Transaction? = TransactionsApi.getTransactionById(id)
-        val json = transaction?.asset?.data as? LinkedTreeMap<*, *> ?: error("Error parsing the transaction response")
+        val json = transaction?.asset?.data as? Map<*, *> ?: error("Error while parsing the transaction response")
 
         val currencyId: String = json[TransactionRequest::currencyId.name]?.toString() ?: error("CurrencyId parsing error")
         val quantity: Double = json[TransactionRequest::quantity.name] as? Double ?: error("Quantity parsing error")
@@ -52,5 +52,5 @@ class BigChainDbService(@Value("\${application.id}") val id: String, @Value("\${
         return TransactionRequest(currencyId, quantity.toFloat(), additionalInformation)
     }
 
-    fun getTransactionsByCurrency(currencyId: String): List<Transaction> = TransactionsApi.searchTransactionByKeyword(currencyId)
+    fun getTransactionsByCurrency(currencyId: String): List<Asset> = TransactionsApi.searchTransactionByKeyword(currencyId)
 }
