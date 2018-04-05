@@ -17,9 +17,9 @@ class CurrencyService(val repository: CurrencyRepository) {
     fun createCurrency(request: CurrencyCreationRequest): Currency {
         //Destructuring the request
         val (name, owner) = request
-        val symbol = "SfeirC"
-        //Create and save the currency into the database
+        val symbol = name + "Coin"
 
+        //Create and save the currency into the database
         val currency = Currency(name, symbol, owner)
         val savedCurrency = repository.save(currency) ?: throw Exception(PERSISTENCE_FAILED)
 
