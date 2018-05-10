@@ -50,7 +50,7 @@ class TransactionInstantiationTest {
 
         instanceId?.let {
             try {
-                val transaction: Transaction? = restTemplate.getForObject("$transactionApi?id=$instanceId", Transaction::class.java)
+                val transaction: Transaction? = restTemplate.getForObject("$transactionApi/$instanceId", Transaction::class.java)
                 val (currency, quantity, additionalInformation) = transaction ?: throw Exception("No transaction returned")
 
                 assertEquals(instanceId, transaction.id)
