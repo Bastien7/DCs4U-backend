@@ -25,5 +25,7 @@ class TransactionService(val transactionRepository: TransactionRepository, val c
         return savedTransaction?: throw Exception(ID_SHOULD_NOT_BE_NULL)
     }
 
-    fun getTransactionsByCurrency(currencyId: String): List<Transaction> = transactionRepository.findByCurrencyId(currencyId)
+    fun getTransactionsByCurrency(currencyId: String): List<Transaction> {
+        return transactionRepository.findAll().filter { it.currency.id == currencyId }
+    }
 }
