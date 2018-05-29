@@ -11,7 +11,7 @@ class TransactionService(val transactionRepository: TransactionRepository, val c
 
     fun getTransaction(id: String): Transaction? = transactionRepository.findById(id).orElse(null)
 
-    fun instantiateTransaction(request: TransactionRequest): String {
+    fun instantiateTransaction(request: TransactionRequest): Transaction {
         //Destructuring the request
         val (currencyId, quantity, additionalInformation) = request
 
@@ -22,7 +22,7 @@ class TransactionService(val transactionRepository: TransactionRepository, val c
         val transaction = Transaction(currency, quantity, additionalInformation)
         val savedTransaction = transactionRepository.save(transaction)
 
-        return savedTransaction.id ?: throw Exception(ID_SHOULD_NOT_BE_NULL)
+        return savedTransaction?: throw Exception(ID_SHOULD_NOT_BE_NULL)
     }
 
     fun getTransactionsByCurrency(currencyId: String): List<Transaction> = transactionRepository.findByCurrencyId(currencyId)
