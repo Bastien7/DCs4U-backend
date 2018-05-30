@@ -1,8 +1,8 @@
 package com.dcs4u
 
-import com.authenteq.model.Asset
 import com.dcs4u.controller.ControllerUrl
-import com.dcs4u.json.request.Transaction
+import com.dcs4u.json.request.TransactionRequest
+import com.dcs4u.model.BlockchainTransaction
 import com.dcs4u.model.Currency
 import com.dcs4u.model.Owner
 import com.dcs4u.repository.CurrencyRepository
@@ -43,18 +43,19 @@ class BlockchainTransactionTest {
      */
     @Test
     fun instantiateTransactionAndFind() {
-        val request = Transaction(testCurrency?.id ?: "1", 12f, "This is a transaction test")
-        val instanceId: String? = restTemplate.postForObject(transactionApi, request, String::class.java)
+        val request = TransactionRequest(testCurrency?.id ?: "1", 12f, "This is a transaction test")
+        val instanceId: String? = restTemplate.postForObject(transactionApi, request, BlockchainTransaction::class.java)?.id
         assertNotNull(instanceId)
 
         Thread.sleep(2000) //Wait for the BigChainDb to make available the transaction
 
         instanceId?.let {
-            val transaction: Transaction = restTemplate.getForObject("$transactionApi?id=$instanceId", Transaction::class.java) ?: error("The server response is null")
-            val (currencyId, quantity, additionalInformation) = transaction
+            val transaction: BlockchainTransaction = restTemplate.getForObject("$transactionApi/$instanceId", BlockchainTransaction::class.java) ?: error("The server response is null")
+            val (_, currency, quantity, date, additionalInformation) = transaction
 
-            Assert.assertEquals(testCurrency?.id, currencyId)
+            Assert.assertEquals(testCurrency?.id, currency.id)
             Assert.assertEquals(request.quantity, quantity)
+            Assert.assertEquals(request.datetime, date)
             Assert.assertEquals(request.additionalInformation, additionalInformation)
         }
     }
@@ -68,19 +69,19 @@ class BlockchainTransactionTest {
         val currencyId: String = testCurrency?.id ?: error("That's not possible!")
 
         //Create a transaction before to search it by currency
-        val request = Transaction(currencyId, 12f, "This is a transaction test")
+        val request = TransactionRequest(currencyId, 12f, "This is a transaction test")
         val instanceId: String? = restTemplate.postForObject(transactionApi, request, String::class.java)
         assertNotNull(instanceId)
 
         Thread.sleep(2000) //Wait for the BigChainDb to make available the transaction
 
-        val assets: List<Map<String, Map<String, *>>> = restTemplate.getForObject("$transactionApi/currency/$currencyId", List::class.java)
-            as? List<Map<String, Map<String, *>>> ?: error("Error in server response content")
+        val transactions: List<BlockchainTransaction> = restTemplate.getForObject("$transactionApi/currency/$currencyId", List::class.java)
+            as? List<BlockchainTransaction> ?: error("Error in server response content")
 
-        assets.first()["data"]?.let {
-            assertEquals(it[Transaction::currencyId.name]?.toString(), currencyId)
-            assertEquals(it[Transaction::quantity.name]?.toString()?.toFloat(), 12f)
-            assertEquals(it[Transaction::additionalInformation.name]?.toString(), "This is a transaction test")
+        transactions.first()?.let {
+            assertEquals(it.currency.id, currencyId)
+            assertEquals(it.quantity, 12f)
+            assertEquals(it.additionalInformation, "This is a transaction test")
         } ?: error("Problem in the transaction content")
     }
 

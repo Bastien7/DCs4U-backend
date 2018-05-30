@@ -4,7 +4,6 @@ import com.dcs4u.controller.ControllerUrl.CURRENCY_API
 import com.dcs4u.json.request.CurrencyCreationRequest
 import com.dcs4u.service.CurrencyService
 import org.springframework.web.bind.annotation.*
-import javax.websocket.server.PathParam
 
 @CrossOrigin
 @RestController
@@ -12,7 +11,10 @@ import javax.websocket.server.PathParam
 class CurrencyController(val currencyService: CurrencyService) {
 
     @GetMapping
-    fun getCurrency(@PathParam("id") id: String) = currencyService.get(id)
+    fun getAllCurrencies() = currencyService.getAllCurrencies()
+
+    @GetMapping("/{id}")
+    fun getCurrency(@PathVariable("id") id: String) = currencyService.get(id)
 
     @PostMapping
     fun createCurrency(@RequestBody request: CurrencyCreationRequest) = currencyService.createCurrency(request)

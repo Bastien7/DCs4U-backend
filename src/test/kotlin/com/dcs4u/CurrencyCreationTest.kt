@@ -39,7 +39,7 @@ class CurrencyCreationTest {
 
         creationId.let {
             try {
-                val currency: Currency? = restTemplate.getForObject("$currencyApi?id=$creationId", Currency::class.java)
+                val currency: Currency? = restTemplate.getForObject("$currencyApi/$creationId", Currency::class.java)
                 val (name, symbol, owner) = currency ?: throw Exception("No currency returned")
 
                 assertEquals(creationId, currency.id)
