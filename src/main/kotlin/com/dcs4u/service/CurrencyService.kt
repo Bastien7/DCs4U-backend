@@ -4,13 +4,14 @@ import com.dcs4u.json.request.CurrencyCreationRequest
 import com.dcs4u.model.Currency
 import com.dcs4u.repository.CurrencyRepository
 import com.dcs4u.utils.ErrorMessages.PERSISTENCE_FAILED
+import com.dcs4u.utils.Loggable
 import org.springframework.stereotype.Component
 
 /**
  * Created by bastien on 26/11/2017.
  */
 @Component
-class CurrencyService(val repository: CurrencyRepository) {
+class CurrencyService(val repository: CurrencyRepository) : Loggable {
 
     fun getAllCurrencies(): List<Currency> = repository.findAll()
 
@@ -25,6 +26,7 @@ class CurrencyService(val repository: CurrencyRepository) {
         val currency = Currency(name, symbol, owner)
         val savedCurrency = repository.save(currency) ?: throw Exception(PERSISTENCE_FAILED)
 
+        log.info("The currency $name has been created")
         return savedCurrency
     }
 }
